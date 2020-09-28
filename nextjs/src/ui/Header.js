@@ -6,7 +6,7 @@ import { useTheme, makeStyles } from "@material-ui/core/styles";
 const useStyles = makeStyles((theme) => ({
   toolbarMargin: {
     ...theme.mixins.toolbar,
-    marginBottom: "3em",
+    marginBottom: "3.5em",
     [theme.breakpoints.down("md")]: {
       marginBottom: "2em",
     },

@@ -306,6 +306,7 @@ const ProjectManager = () => {
         </Grid>
         <Dialog
           fullWidth
+          style={{zIndex: 1310}}
           maxWidth="md"
           open={dialogOpen}
           onClose={() => setDialogOpen(false)}
