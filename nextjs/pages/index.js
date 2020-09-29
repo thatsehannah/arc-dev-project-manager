@@ -25,6 +25,7 @@ import {
   Button,
   Checkbox,
   TableSortLabel,
+  useMediaQuery,
 } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import FilterListIcon from "@material-ui/icons/FilterList";
@@ -82,6 +83,8 @@ const createData = (
 const ProjectManager = () => {
   const classes = useStyles();
   const theme = useTheme();
+  const matchesMD = useMediaQuery(theme.breakpoints.down("md"));
+  const matchesSM = useMediaQuery(theme.breakpoints.down("sm"));
 
   const platformOptions = ["Web", "iOS", "Android"];
   let featureOptions = [
@@ -226,8 +229,15 @@ const ProjectManager = () => {
 
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
-      <Grid container direction="column">
-        <Grid item style={{ marginTop: "2em", marginLeft: "5em" }}>
+      <Grid
+        container
+        direction="column"
+        alignItems={matchesSM ? "center" : undefined}
+      >
+        <Grid
+          item
+          style={{ marginTop: "2em", marginLeft: matchesSM ? 0 : "5em" }}
+        >
           <Typography variant="h1">Projects</Typography>
         </Grid>
         <Grid item>
@@ -235,7 +245,10 @@ const ProjectManager = () => {
             placeholder="Search project detauls or create a new entry."
             value={search}
             onChange={handleSearch}
-            style={{ width: "35em", marginLeft: "5em" }}
+            style={{
+              width: matchesSM ? "25em" : "35em",
+              marginLeft: matchesSM ? 0 : "5em",
+            }}
             InputProps={{
               endAdornment: (
                 <InputAdornment
@@ -249,66 +262,100 @@ const ProjectManager = () => {
             }}
           />
         </Grid>
-        <Grid item style={{ marginLeft: "5em", marginTop: "2em" }}>
+        <Grid
+          item
+          style={{ marginLeft: matchesSM ? 0 : "5em", marginTop: "2em" }}
+        >
           <FormGroup row>
-            <FormControlLabel
-              style={{ marginRight: "5em" }}
-              control={
-                <Switch
-                  checked={websiteChecked}
-                  color="primary"
-                  onChange={() => setWebsiteChecked(!websiteChecked)}
+            <Grid
+              container
+              direction={matchesSM ? "column" : "row"}
+              justify={matchesSM ? "center" : undefined}
+            >
+              <Grid item>
+                <FormControlLabel
+                  style={{ marginRight: matchesSM ? 0 : "5em" }}
+                  control={
+                    <Switch
+                      checked={websiteChecked}
+                      color="primary"
+                      onChange={() => setWebsiteChecked(!websiteChecked)}
+                    />
+                  }
+                  label="Websites"
+                  labelPlacement={matchesSM ? "end" : "start"}
                 />
-              }
-              label="Websites"
-              labelPlacement="start"
-            />
-            <FormControlLabel
-              style={{ marginRight: "5em" }}
-              control={
-                <Switch
-                  checked={iOSChecked}
-                  color="primary"
-                  onChange={() => setiOSChecked(!iOSChecked)}
+              </Grid>
+              <Grid item>
+                <FormControlLabel
+                  style={{ marginRight: matchesSM ? 0 : "5em" }}
+                  control={
+                    <Switch
+                      checked={iOSChecked}
+                      color="primary"
+                      onChange={() => setiOSChecked(!iOSChecked)}
+                    />
+                  }
+                  label="iOS Apps"
+                  labelPlacement={matchesSM ? "end" : "start"}
                 />
-              }
-              label="iOS Apps"
-              labelPlacement="start"
-            />
-            <FormControlLabel
-              style={{ marginRight: "5em" }}
-              control={
-                <Switch
-                  checked={androidChecked}
-                  color="primary"
-                  onChange={() => setAndroidChecked(!androidChecked)}
+              </Grid>
+              <Grid item>
+                <FormControlLabel
+                  style={{ marginRight: matchesSM ? 0 : "5em" }}
+                  control={
+                    <Switch
+                      checked={androidChecked}
+                      color="primary"
+                      onChange={() => setAndroidChecked(!androidChecked)}
+                    />
+                  }
+                  label="Android Apps"
+                  labelPlacement={matchesSM ? "end" : "start"}
                 />
-              }
-              label="Android Apps"
-              labelPlacement="start"
-            />
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={softwareChecked}
-                  color="primary"
-                  onChange={() => setSoftwareChecked(!softwareChecked)}
+              </Grid>
+              <Grid item>
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={softwareChecked}
+                      color="primary"
+                      onChange={() => setSoftwareChecked(!softwareChecked)}
+                    />
+                  }
+                  label="Custom Software"
+                  llabelPlacement={matchesSM ? "end" : "start"}
                 />
-              }
-              label="Custom Software"
-              labelPlacement="start"
-            />
+              </Grid>
+            </Grid>
           </FormGroup>
         </Grid>
 
-        <Grid item style={{ marginTop: "5em", marginBottom: "35em" }}>
-          <EnhancedTable rows={rows} page={page} setPage={setPage} />
+        <Grid
+          item
+          style={{
+            marginTop: "5em",
+            maxWidth: "100%",
+            marginBottom: matchesMD ? "40em" : "35em",
+          }}
+        >
+          <EnhancedTable
+            rows={rows}
+            setRows={setRows}
+            page={page}
+            setPage={setPage}
+            websiteChecked={websiteChecked}
+            iOSChecked={iOSChecked}
+            androidChecked={androidChecked}
+            softwareChecked={softwareChecked}
+          />
         </Grid>
         <Dialog
           fullWidth
-          style={{zIndex: 1310}}
+          style={{ zIndex: 1310 }}
           maxWidth="md"
           open={dialogOpen}
+          fullScreen={matchesSM}
           onClose={() => setDialogOpen(false)}
         >
           <Grid container justify="center">
@@ -319,14 +366,25 @@ const ProjectManager = () => {
             </Grid>
           </Grid>
           <DialogContent>
-            <Grid container justify="space-between">
+            <Grid
+              container
+              justify="space-between"
+              direction={matchesSM ? "column" : "row"}
+            >
               {/* Column 1 */}
               <Grid item>
-                <Grid item container direction="column" sm>
+                <Grid
+                  item
+                  container
+                  direction="column"
+                  alignItems={matchesSM ? "center" : undefined}
+                  sm
+                >
                   {/* Row 1 */}
                   <Grid item>
                     <TextField
-                      fullWidth
+                      fullWidth={!matchesSM}
+                      style={{ width: matchesSM ? 250 : undefined }}
                       label="Name"
                       id="name"
                       value={name}
@@ -339,7 +397,10 @@ const ProjectManager = () => {
                       item
                       container
                       direction="column"
-                      style={{ marginTop: "5em" }}
+                      alignItems={matchesSM ? "center" : undefined}
+                      style={{
+                        marginTop: matchesSM ? 50 : "5em",
+                      }}
                     >
                       <Grid item>
                         <Typography variant="h4">Service</Typography>
@@ -378,10 +439,10 @@ const ProjectManager = () => {
                     </Grid>
                   </Grid>
                   {/* Row 3 */}
-                  <Grid item style={{ marginTop: "5em" }}>
+                  <Grid item style={{ marginTop: matchesSM ? 50 : "5em" }}>
                     <Select
                       labelId="platforms"
-                      style={{ width: "12em" }}
+                      style={{ width: matchesSM ? 250 : "12em" }}
                       MenuProps={{ style: { zIndex: 1310 } }}
                       id="platforms"
                       disabled={service === "Website"}
@@ -413,8 +474,9 @@ const ProjectManager = () => {
                   style={{ marginTop: 16 }}
                 >
                   {/* Row 1 */}
-                  <Grid item>
+                  <Grid item style={{ marginTop: matchesSM ? 50 : null }}>
                     <KeyboardDatePicker
+                      style={{ width: matchesSM ? 250 : undefined }}
                       format="MM/dd/yyyy"
                       value={date}
                       onChange={(newDate) => setDate(newDate)}
@@ -426,7 +488,7 @@ const ProjectManager = () => {
                       item
                       container
                       direction="column"
-                      style={{ marginTop: "5em" }}
+                      style={{ marginTop: matchesSM ? 50 : "5em" }}
                     >
                       <Grid item>
                         <Typography variant="h4">Complexity</Typography>
@@ -467,10 +529,17 @@ const ProjectManager = () => {
               </Grid>
               {/* Column 3 */}
               <Grid item>
-                <Grid item container direction="column" sm>
+                <Grid
+                  item
+                  container
+                  direction="column"
+                  sm
+                  alignItems={matchesSM ? "center" : undefined}
+                >
                   {/* Row 1 */}
-                  <Grid item>
+                  <Grid item style={{ marginTop: matchesSM ? 50 : null }}>
                     <TextField
+                      style={{ width: matchesSM ? 250 : undefined }}
                       InputProps={{
                         startAdornment: (
                           <InputAdornment position="start">$</InputAdornment>
@@ -483,12 +552,15 @@ const ProjectManager = () => {
                     />
                   </Grid>
                   {/* Row 2 */}
-                  <Grid item style={{ alignSelf: "flex-end" }}>
+                  <Grid
+                    item
+                    style={{ alignSelf: matchesSM ? "center" : "flex-end" }}
+                  >
                     <Grid
                       item
                       container
                       direction="column"
-                      style={{ marginTop: "5em" }}
+                      style={{ marginTop: matchesSM ? 50 : "5em" }}
                     >
                       <Grid item>
                         <Typography variant="h4">Users</Typography>
@@ -535,10 +607,10 @@ const ProjectManager = () => {
                     </Grid>
                   </Grid>
                   {/* Row 3 */}
-                  <Grid item style={{ marginTop: "5em" }}>
+                  <Grid item style={{ marginTop: matchesSM ? 50 : "5em" }}>
                     <Select
                       labelId="features"
-                      style={{ width: "12em" }}
+                      style={{ width: matchesSM ? 250 : "12em" }}
                       MenuProps={{ style: { zIndex: 1310 } }}
                       id="features"
                       multiple
